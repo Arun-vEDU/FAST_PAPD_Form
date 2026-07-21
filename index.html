@@ -426,7 +426,7 @@
 
     <div class="semester-card" data-sem="inter2027">
       <div class="semester-head">
-        <h3>Intersession</h3>
+        <h3>Inter-semester</h3>
         <span>Summer 2027</span>
       </div>
       <div class="course-list"></div>
@@ -439,7 +439,7 @@
       <label class="consent-line">
         <input type="checkbox" id="consentAll">
         <span>I consent to my recorded lectures for the course(s) listed above, across the 2026–27
-        academic year (Fall 2026, Spring 2027, Intersession 2027), being uploaded to the <b>AIT
+        academic year (Fall 2026, Spring 2027, Inter-semester 2027), being uploaded to the <b>AIT
         Recordings</b> YouTube channel — except for any course(s) specifically listed below.</span>
       </label>
     </div>
@@ -487,8 +487,8 @@
 
     <div class="footer-note">
       Submitting opens a new tab to confirm with your AIT Google account, then logs your response to
-      Google Sheets, saves a PDF, and emails a copy to you and to the recordings office at
-      <span id="officeEmailDisplay">recordings@ait.ac.th</span>. If the new tab shows a Google Drive
+      Google Sheets, saves a PDF, and emails a copy to you and to the dean office at
+      <span id="officeEmailDisplay">iot@ait.ac.th</span>. If the new tab shows a Google Drive
       "file cannot be opened" error instead of a confirmation, you're signed into the wrong Google
       account in this browser — switch to your AIT account above and submit again.
     </div>
@@ -501,7 +501,7 @@
   const SCRIPT_URL = "https://script.google.com/a/macros/ait.asia/s/AKfycbx2D3z7WHC6sCAErJhSaBEDOvSq5heRSnNYhdTjK6NS0UZ-kzRL-zJTtUmIwF2ijhhw/exec";
 
   // Cosmetic only — shown in the footer note. Keep this in sync with OFFICE_EMAIL in the Apps Script.
-  const OFFICE_EMAIL_DISPLAY = "recordings@ait.ac.th";
+  const OFFICE_EMAIL_DISPLAY = "iot@ait.ac.th";
   document.getElementById('officeEmailDisplay').textContent = OFFICE_EMAIL_DISPLAY;
 
   const semesterLabels = {
