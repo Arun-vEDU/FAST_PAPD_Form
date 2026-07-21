@@ -437,6 +437,12 @@
       </div>
     </div>
 
+    <!-- Real form POST (not fetch) so the browser can complete Google sign-in
+         when the Apps Script deployment is restricted to your organization. -->
+    <form id="deliveryForm" method="POST" target="_blank" style="display:none;">
+      <input type="hidden" name="payload" id="payloadField">
+    </form>
+
     <div class="actions">
       <button class="primary" id="submitBtn" onclick="submitForm()">Submit consent</button>
       <button class="secondary" onclick="window.print()">Print / save as PDF</button>
@@ -445,8 +451,9 @@
     <div class="status" id="status"></div>
 
     <div class="footer-note">
-      Submitting logs your response to Google Sheets and emails a copy to you and to the recordings office
-      at <span id="officeEmailDisplay">arunya@ait.ac.th</span>.
+      Submitting opens a new tab to confirm with your AIT Google account, then logs your response to
+      Google Sheets, saves a PDF, and emails a copy to you and to the recordings office at
+      <span id="officeEmailDisplay">recordings@ait.ac.th</span>.
     </div>
 
   </div>
@@ -457,7 +464,7 @@
   const SCRIPT_URL = "https://script.google.com/a/macros/ait.asia/s/AKfycbx2D3z7WHC6sCAErJhSaBEDOvSq5heRSnNYhdTjK6NS0UZ-kzRL-zJTtUmIwF2ijhhw/exec";
 
   // Cosmetic only — shown in the footer note. Keep this in sync with OFFICE_EMAIL in the Apps Script.
-  const OFFICE_EMAIL_DISPLAY = "arunya@ait.ac.th";
+  const OFFICE_EMAIL_DISPLAY = "recordings@ait.ac.th";
   document.getElementById('officeEmailDisplay').textContent = OFFICE_EMAIL_DISPLAY;
 
   const semesterLabels = {
@@ -550,15 +557,23 @@
     el.className = 'status show ' + (ok ? 'ok' : 'err');
   }
 
+  // Keep this in sync with ALLOWED_EMAIL_DOMAINS in Code.gs — this copy only
+  // gives faster feedback in the browser; the server enforces it either way.
+  const ALLOWED_EMAIL_DOMAINS = ['ait.ac.th', 'ait.asia'];
+
   function validate(d){
     if(!d.name) return 'Please enter your full name.';
     if(!d.email) return 'Please enter your email address — a copy is sent there.';
+    const domain = (d.email.split('@')[1] || '').toLowerCase();
+    if(!ALLOWED_EMAIL_DOMAINS.some(a => domain === a.toLowerCase())){
+      return `Please use your institutional email (${ALLOWED_EMAIL_DOMAINS.join(' or ')}).`;
+    }
     if(!d.signature) return 'Please type your signature to confirm this form.';
     if(!d.consent && !d.exceptions.length) return 'Please check the consent box, or list exceptions if declining.';
     return null;
   }
 
-  async function submitForm(){
+  function submitForm(){
     const d = collectData();
     const err = validate(d);
     if(err){
@@ -573,29 +588,12 @@
     const summaryText = buildSummaryText(d);
     const payload = Object.assign({}, d, { summaryText });
 
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'Submitting…';
-    showStatus('Submitting your consent…', true);
+    document.getElementById('payloadField').value = JSON.stringify(payload);
+    const form = document.getElementById('deliveryForm');
+    form.action = SCRIPT_URL;
+    form.submit();
 
-    try{
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
-        body: JSON.stringify(payload)
-      });
-      const result = await res.json();
-      if(result.status === 'success'){
-        showStatus(`Submitted. A PDF copy was saved to Drive and emailed to ${d.email} and to ${OFFICE_EMAIL_DISPLAY}, and logged to Google Sheets.`, true);
-      } else {
-        showStatus('Something went wrong on the server: ' + (result.message || 'unknown error'), false);
-      }
-    } catch(err){
-      showStatus('Could not reach the submission server. Check your connection and try again.', false);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Submit consent';
-    }
+    showStatus('A new tab has opened to complete your submission — sign in with your AIT account if prompted. Once you see a confirmation there, you can close that tab.', true);
   }
 
   function clearForm(){
