@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAPD Form — AIT Course Recording Consent (AY 2026–27)</title>
+<style>
+  :root{
+    --paper:#FAF7F0;
+    --paper-dim:#F1ECE1;
+    --ink:#1E2A3A;
+    --ink-soft:#4B5563;
+    --line:#C9BFA8;
+    --maroon:#7A2E2E;
+    --maroon-dark:#5E2222;
+    --gold:#A9822F;
+    --ok:#2F6B4F;
+    --danger:#B0402F;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper-dim);
+    color:var(--ink);
+    font-family:'Iowan Old Style','Palatino Linotype',Georgia,serif;
+    line-height:1.5;
+    padding:40px 16px 80px;
+  }
+  .sheet{
+    max-width:820px;
+    margin:0 auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(30,42,58,0.06), 0 12px 32px rgba(30,42,58,0.10);
+    position:relative;
+  }
+  .sheet::before{
+    content:"";
+    position:absolute;
+    inset:10px;
+    border:1px solid var(--line);
+    pointer-events:none;
+  }
+  .inner{padding:48px 52px 44px;}
+
+  .letterhead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    border-bottom:2px solid var(--maroon);
+    padding-bottom:18px;
+    margin-bottom:8px;
+  }
+  .mark{
+    width:46px;height:46px;
+    border:2px solid var(--maroon);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Trajan Pro',Georgia,serif;
+    font-weight:700;
+    color:var(--maroon);
+    font-size:13px;
+    letter-spacing:0.5px;
+    flex-shrink:0;
+  }
+  .letterhead-text{flex:1;margin-left:16px;}
+  .letterhead-text .org{
+    font-size:11px;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--maroon);
+    font-family:Georgia,serif;
+    font-weight:600;
+  }
+  .letterhead-text h1{
+    font-size:26px;
+    margin:4px 0 2px;
+    font-weight:400;
+    letter-spacing:0.2px;
+    color:var(--ink);
+  }
+  .letterhead-text .sub{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-style:italic;
+    font-family:Georgia,serif;
+  }
+  .intro{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin:18px 0 30px;
+    padding:14px 16px;
+    background:var(--paper-dim);
+    border-left:3px solid var(--gold);
+  }
+  .intro b{color:var(--ink);}
+
+  .section-label{
+    font-family:Georgia,serif;
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--maroon);
+    font-weight:700;
+    margin:34px 0 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  label{
+    display:block;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  input[type=text], input[type=email], textarea{
+    width:100%;
+    font-family:Georgia,serif;
+    font-size:15px;
+    color:var(--ink);
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:10px 12px;
+    outline:none;
+  }
+  input[type=text]:focus, input[type=email]:focus, textarea:focus{
+    border-color:var(--maroon);
+    box-shadow:0 0 0 3px rgba(122,46,46,0.08);
+  }
+  .field{margin-bottom:18px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+
+  .semester-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:#fff;
+    padding:18px 20px 20px;
+    margin-bottom:16px;
+  }
+  .semester-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:12px;
+  }
+  .semester-head h3{
+    margin:0;
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .semester-head span{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:10.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+  }
+  .course-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .course-row input{flex:1;}
+  .course-row input.code{flex:0 0 110px;}
+  .icon-btn{
+    border:1px solid var(--line);
+    background:var(--paper-dim);
+    color:var(--ink-soft);
+    width:38px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    font-size:16px;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .icon-btn:hover{background:var(--line);color:var(--ink);}
+  .add-course{
+    margin-top:4px;
+    background:none;
+    border:1px dashed var(--line);
+    color:var(--maroon);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .add-course:hover{background:var(--paper-dim);border-color:var(--maroon);}
+
+  .consent-box{
+    border:1px solid var(--line);
+    background:#fff;
+    padding:18px 20px;
+    border-radius:var(--radius);
+    margin-top:6px;
+  }
+  .consent-line{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-size:14.5px;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .consent-line input{
+    margin-top:4px;
+    width:17px;height:17px;
+    accent-color:var(--maroon);
+    flex-shrink:0;
+  }
+
+  .exception-box{
+    border:1px solid var(--danger);
+    background:#FBF2EF;
+    padding:18px 20px;
+    border-radius:var(--radius);
+    margin-top:16px;
+  }
+  .exception-box .ex-label{
+    color:var(--danger);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .exception-box input{border-color:#DEB8AC;}
+  .exception-box .add-course{color:var(--danger);border-color:#DEB8AC;}
+  .exception-box .add-course:hover{background:#F6DED6;border-color:var(--danger);}
+  .exception-hint{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+
+  .sign-row{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:18px;
+    margin-top:8px;
+  }
+
+  .actions{
+    display:flex;
+    gap:10px;
+    margin-top:38px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  button.primary{
+    background:var(--maroon);
+    color:#fff;
+    border:none;
+    padding:13px 26px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:13.5px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  button.primary:hover{background:var(--maroon-dark);}
+  button.secondary{
+    background:#fff;
+    color:var(--ink);
+    border:1px solid var(--line);
+    padding:13px 22px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:13.5px;
+    font-weight:600;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  button.secondary:hover{background:var(--paper-dim);}
+
+  .status{
+    margin-top:14px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:13px;
+    padding:10px 14px;
+    border-radius:var(--radius);
+    display:none;
+  }
+  .status.show{display:block;}
+  .status.ok{background:#EAF3EE;color:var(--ok);border:1px solid #BFE0CC;}
+  .status.err{background:#FBEAE7;color:var(--danger);border:1px solid #EFC3B8;}
+
+  .footer-note{
+    margin-top:28px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:11px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  @media (max-width:640px){
+    .inner{padding:30px 20px;}
+    .row2, .sign-row{grid-template-columns:1fr;}
+    .letterhead{flex-wrap:wrap;gap:12px;}
+    .doc-id{text-align:left;}
+  }
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .sheet{box-shadow:none;border:none;max-width:100%;}
+    .sheet::before{display:none;}
+    .actions,.status{display:none !important;}
+    .icon-btn,.add-course{display:none !important;}
+    input,textarea{border:none;border-bottom:1px solid #999;border-radius:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="inner">
+
+    <div class="letterhead">
+      <div style="display:flex;align-items:flex-start;">
+        <div class="mark">AIT</div>
+        <div class="letterhead-text">
+          <div class="org">Asian Institute of Technology · Thailand</div>
+          <h1>PAPD Form</h1>
+          <div class="sub">Consent for Course Recording &amp; YouTube Upload — Academic Year 2026–2027</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="intro">
+      This form records your consent for lectures delivered across the <b>2026–27 academic year</b> to be
+      recorded and uploaded to the <b>AIT Recordings</b> YouTube channel. Please list the courses you are
+      offering in each semester below, then indicate your consent. If there are specific courses you do
+      <b>not</b> wish to have recorded, list them in the exceptions section below — everything else you
+      list will be treated as consented.
+    </div>
+
+    <!-- PERSONAL DETAILS -->
+    <div class="section-label">Instructor Details</div>
+    <div class="row2">
+      <div class="field">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="e.g. Dr. Ayesha Khan" required>
+      </div>
+      <div class="field">
+        <label for="facultyId">Faculty / Employee ID</label>
+        <input type="text" id="facultyId" placeholder="e.g. FID-1042">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="dept">Academic Program</label>
+        <input type="text" id="dept" placeholder="e.g. Information and Communication Technologies">
+      </div>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="name@ait.ac.th">
+      </div>
+    </div>
+
+    <!-- SEMESTERS -->
+    <div class="section-label">Course Offerings — Academic Year 2026–27</div>
+
+    <div class="semester-card" data-sem="fall2026">
+      <div class="semester-head">
+        <h3>Fall Semester</h3>
+        <span>August 2026</span>
+      </div>
+      <div class="course-list"></div>
+      <button type="button" class="add-course" onclick="addCourseRow('fall2026')">+ Add course</button>
+    </div>
+
+    <div class="semester-card" data-sem="spring2027">
+      <div class="semester-head">
+        <h3>Spring Semester</h3>
+        <span>January 2027</span>
+      </div>
+      <div class="course-list"></div>
+      <button type="button" class="add-course" onclick="addCourseRow('spring2027')">+ Add course</button>
+    </div>
+
+    <div class="semester-card" data-sem="inter2027">
+      <div class="semester-head">
+        <h3>Intersession</h3>
+        <span>Summer 2027</span>
+      </div>
+      <div class="course-list"></div>
+      <button type="button" class="add-course" onclick="addCourseRow('inter2027')">+ Add course</button>
+    </div>
+
+    <!-- CONSENT -->
+    <div class="section-label">Consent</div>
+    <div class="consent-box">
+      <label class="consent-line">
+        <input type="checkbox" id="consentAll">
+        <span>I consent to my recorded lectures for the course(s) listed above, across the 2026–27
+        academic year (Fall 2026, Spring 2027, Intersession 2027), being uploaded to the <b>AIT
+        Recordings</b> YouTube channel — except for any course(s) specifically listed below.</span>
+      </label>
+    </div>
+
+    <div class="exception-box" data-sem="exceptions">
+      <div class="ex-label">
+        <strong style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11.5px;text-transform:uppercase;letter-spacing:0.8px;">Exceptions — courses I do NOT consent to recording</strong>
+      </div>
+      <div class="course-list"></div>
+      <button type="button" class="add-course" onclick="addCourseRow('exceptions')">+ Add course</button>
+      <div class="exception-hint">Leave empty if you consent to recording for all courses listed above.</div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="section-label">Signature</div>
+    <div class="sign-row">
+      <div class="field">
+        <label for="signature">Typed Signature (full name)</label>
+        <input type="text" id="signature" placeholder="Type your full name to sign">
+      </div>
+      <div class="field">
+        <label for="signDate">Date</label>
+        <input type="text" id="signDate" placeholder="DD-MM-YYYY">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="submitBtn" onclick="submitForm()">Submit consent</button>
+      <button class="secondary" onclick="window.print()">Print / save as PDF</button>
+      <button class="secondary" onclick="clearForm()">Clear form</button>
+    </div>
+    <div class="status" id="status"></div>
+
+    <div class="footer-note">
+      Submitting logs your response to Google Sheets and emails a copy to you and to the recordings office
+      at <span id="officeEmailDisplay">arunya@ait.ac.th</span>.
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Paste the Web App URL you get after deploying the Google Apps Script (see setup guide).
+  const SCRIPT_URL = "https://script.google.com/a/macros/ait.asia/s/AKfycbx2D3z7WHC6sCAErJhSaBEDOvSq5heRSnNYhdTjK6NS0UZ-kzRL-zJTtUmIwF2ijhhw/exec";
+
+  // Cosmetic only — shown in the footer note. Keep this in sync with OFFICE_EMAIL in the Apps Script.
+  const OFFICE_EMAIL_DISPLAY = "arunya@ait.ac.th";
+  document.getElementById('officeEmailDisplay').textContent = OFFICE_EMAIL_DISPLAY;
+
+  const semesterLabels = {
+    fall2026: "Fall Semester — August 2026",
+    spring2027: "Spring Semester — January 2027",
+    inter2027: "Intersession — Summer 2027"
+  };
+
+  function addCourseRow(sem, code, title){
+    const list = document.querySelector(`[data-sem="${sem}"] .course-list`);
+    const row = document.createElement('div');
+    row.className = 'course-row';
+    row.innerHTML = `
+      <input type="text" class="code" placeholder="Code (e.g. CS101)" value="${code||''}">
+      <input type="text" class="title" placeholder="Course title (e.g. Intro to Programming)" value="${title||''}">
+      <button type="button" class="icon-btn" onclick="this.parentElement.remove()" title="Remove">×</button>
+    `;
+    list.appendChild(row);
+  }
+
+  // seed one empty row per semester (and one for exceptions) to start
+  ['fall2026','spring2027','inter2027','exceptions'].forEach(s => addCourseRow(s));
+
+  function collectData(){
+    const semesters = {};
+    document.querySelectorAll('.semester-card').forEach(card => {
+      const sem = card.dataset.sem;
+      const courses = [];
+      card.querySelectorAll('.course-row').forEach(row => {
+        const code = row.querySelector('.code').value.trim();
+        const title = row.querySelector('.title').value.trim();
+        if(code || title) courses.push({code, title});
+      });
+      semesters[sem] = courses;
+    });
+    const exceptions = [];
+    document.querySelectorAll('.exception-box .course-row').forEach(row => {
+      const code = row.querySelector('.code').value.trim();
+      const title = row.querySelector('.title').value.trim();
+      if(code || title) exceptions.push({code, title});
+    });
+    return {
+      name: document.getElementById('fullName').value.trim(),
+      facultyId: document.getElementById('facultyId').value.trim(),
+      dept: document.getElementById('dept').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      semesters,
+      consent: document.getElementById('consentAll').checked,
+      exceptions,
+      signature: document.getElementById('signature').value.trim(),
+      signDate: document.getElementById('signDate').value.trim()
+    };
+  }
+
+  function buildSummaryText(d){
+    let lines = [];
+    lines.push('AIT — PAPD FORM: COURSE RECORDING CONSENT (AY 2026–27)');
+    lines.push('='.repeat(56));
+    lines.push(`Name:              ${d.name || '—'}`);
+    lines.push(`Faculty ID:        ${d.facultyId || '—'}`);
+    lines.push(`Academic Program:  ${d.dept || '—'}`);
+    lines.push(`Email:             ${d.email || '—'}`);
+    lines.push('');
+    Object.keys(semesterLabels).forEach(sem => {
+      lines.push(semesterLabels[sem]);
+      const courses = d.semesters[sem];
+      if(!courses.length){
+        lines.push('  (no courses listed)');
+      } else {
+        courses.forEach(c => lines.push(`  - ${c.code || '(no code)'}  ${c.title || ''}`.trim()));
+      }
+      lines.push('');
+    });
+    lines.push(`Consent given: ${d.consent ? 'YES' : 'NO'}`);
+    lines.push('Exceptions (courses NOT consented):');
+    if(!d.exceptions.length){
+      lines.push('  (none)');
+    } else {
+      d.exceptions.forEach(c => lines.push(`  - ${c.code || '(no code)'}  ${c.title || ''}`.trim()));
+    }
+    lines.push('');
+    lines.push(`Signature: ${d.signature || '—'}`);
+    lines.push(`Date:      ${d.signDate || '—'}`);
+    return lines.join('\n');
+  }
+
+  function showStatus(msg, ok){
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status show ' + (ok ? 'ok' : 'err');
+  }
+
+  function validate(d){
+    if(!d.name) return 'Please enter your full name.';
+    if(!d.email) return 'Please enter your email address — a copy is sent there.';
+    if(!d.signature) return 'Please type your signature to confirm this form.';
+    if(!d.consent && !d.exceptions.length) return 'Please check the consent box, or list exceptions if declining.';
+    return null;
+  }
+
+  async function submitForm(){
+    const d = collectData();
+    const err = validate(d);
+    if(err){
+      showStatus(err, false);
+      return;
+    }
+    if(SCRIPT_URL.indexOf('PASTE_YOUR') === 0){
+      showStatus('Backend not connected yet — paste your Apps Script Web App URL into SCRIPT_URL in the page source.', false);
+      return;
+    }
+
+    const summaryText = buildSummaryText(d);
+    const payload = Object.assign({}, d, { summaryText });
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    showStatus('Submitting your consent…', true);
+
+    try{
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if(result.status === 'success'){
+        showStatus(`Submitted. A PDF copy was saved to Drive and emailed to ${d.email} and to ${OFFICE_EMAIL_DISPLAY}, and logged to Google Sheets.`, true);
+      } else {
+        showStatus('Something went wrong on the server: ' + (result.message || 'unknown error'), false);
+      }
+    } catch(err){
+      showStatus('Could not reach the submission server. Check your connection and try again.', false);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Submit consent';
+    }
+  }
+
+  function clearForm(){
+    document.querySelectorAll('input[type=text], input[type=email]').forEach(el => el.value = '');
+    document.getElementById('consentAll').checked = false;
+    document.querySelectorAll('.course-list').forEach(list => list.innerHTML = '');
+    ['fall2026','spring2027','inter2027','exceptions'].forEach(s => addCourseRow(s));
+    document.getElementById('status').className = 'status';
+  }
+</script>
+
+</body>
+</html>
