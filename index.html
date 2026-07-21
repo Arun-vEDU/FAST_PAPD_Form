@@ -140,6 +140,11 @@
     border-color:var(--maroon);
     box-shadow:0 0 0 3px rgba(122,46,46,0.08);
   }
+  input[readonly]{
+    background:var(--paper-dim);
+    color:var(--ink-soft);
+    cursor:not-allowed;
+  }
   .field{margin-bottom:18px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 
@@ -457,7 +462,8 @@
       </div>
       <div class="field">
         <label for="signDate">Date</label>
-        <input type="text" id="signDate" placeholder="DD-MM-YYYY">
+        <input type="text" id="signDate" readonly>
+        <div class="exception-hint" style="margin-top:6px;">Set automatically to today's date.</div>
       </div>
     </div>
 
@@ -518,6 +524,15 @@
 
   // seed one empty row per semester (and one for exceptions) to start
   ['fall2026','spring2027','inter2027','exceptions'].forEach(s => addCourseRow(s));
+
+  function setTodayAsSignDate(){
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    document.getElementById('signDate').value = `${dd}-${mm}-${yyyy}`;
+  }
+  setTodayAsSignDate();
 
   function collectData(){
     const semesters = {};
@@ -632,6 +647,7 @@
     document.getElementById('consentAll').checked = false;
     document.querySelectorAll('.course-list').forEach(list => list.innerHTML = '');
     ['fall2026','spring2027','inter2027','exceptions'].forEach(s => addCourseRow(s));
+    setTodayAsSignDate();
     document.getElementById('status').className = 'status';
   }
 </script>
