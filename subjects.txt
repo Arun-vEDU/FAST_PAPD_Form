@@ -1,0 +1,102 @@
+AST00.01 - Optimization for Information Transmission and Processing
+AST00.02 - Optical Networks
+AST01.01 - Deterministic Optimization Models
+AST01.02 - Statistical Models and Design of Experiments
+AST01.03 - Quality Control and Management
+AST01.04 - Stochastic Decision Models
+AST01.05 - Applied Data Analytics
+AST01.06 - Supply Chain Management
+AST01.07 - International Collaborative Project Management
+AST01.08 - Product Design and Development
+AST01.09 - Customer Experience-Driven Design
+AST01.10 - Additive Manufacturing and Reverse Engineering
+AST01.11 - Digital Factory
+AST01.12 - Collaborative Manufacturing Systems
+AST01.13 - Communications and People Skills Development for Engineering Leaders
+AST01.14 - Kinematics and Dynamics of Mechanisms and Robots
+AST01.15 - Sensing and Actuation
+AST01.16 - AI and Neuro-Fuzzy Theory
+AST01.17 - Automation Technology
+AST01.18 - Control Theory
+AST01.19 - Haptics
+AST01.20 - Microelectronics Fabrication Technology
+AST01.21 - Digital Integrated Circuit Design
+AST01.22 - Advanced Semiconductor Device Theory
+AST01.23 - Analog Integrated Circuit Design
+AST01.24 - VLSI Design
+AST01.25 - Micro-Electro Mechanical Systems
+AST01.26 - Embedded Systems Architecture
+AST01.27 - Embedded Systems Design
+AST01.28 - Nano-Micro Fabrication Technologies
+AST01.29 - Fundamentals of Bionanotechnology
+AST01.30 - Biomimetics
+AST01.31 - Biosensors and Bioelectronics
+AST01.32 - Nanomaterials and Nanotechnology
+AST01.33 - Biomaterials for Medical Engineers
+AST01.34 - Physiology for Medical Engineering
+AST01.35 - Biomechanics
+AST01.36 - Medical Instrumentation and Imaging
+AST01.37 - Deep Reinforcement Learning
+AST01.38 - Deep Learning for Computer Vision
+AST01.39 - Advanced Topics in Internet Technology
+AST01.40 - Data-Driven Signal Processing
+AST01.41 - Fundamentals of Internet of Things and Cloud Computing
+AST01.42 - Information and Communication Technology Design and Management of Projects in the Digital Age
+AST01.43 - Information and Communication Technology User-Centric Technology Design
+AST01.44 - IoT Security
+AST01.45 - Machine Learning for Next-Generation IoT: Smart Systems and Applications
+AST01.46 - TinyML and Edge Intelligence for IoT Devices
+AST01.47 - Wireless Technologies for Internet of Things
+AST02.01 - Theory of Computation
+AST02.02 - Advanced Data Structure and Algorithms
+AST02.03 - Programming Languages and Compilers
+AST02.04 - Full Stack Application Development
+AST02.05 - Research Methods in Computing
+AST02.06 - Computer Networks
+AST02.07 - Cybersecurity
+AST02.08 - Software Architecture Design
+AST02.09 - Quantum Computing
+AST02.10 - Computer Programming for Data Science and Artificial Intelligence
+AST02.11 - Data Modeling and Management
+AST02.12 - Machine Learning
+AST02.13 - Natural Language Processing
+AST02.14 - Knowledge Representation and Reasoning
+AST02.15 - Computer Vision
+AST02.16 - Knowledge Graph
+AST02.17 - Data Engineering and MLOps
+AST02.18 - Business Intelligence and Analytics
+AST02.19 - Enterprise Information Systems Development and Management
+AST02.20 - Data Privacy, Security and Governance
+AST02.21 - E-Business Development and Technology
+AST02.22 - E-Government Development
+AST02.23 - Human-Computer Interaction
+AST02.24 - Fundamentals of Cloud Computing and its Applications
+AST02.25 - Cellular Mobile Systems
+AST02.26 - Classical Signal Processing and Non-Classical Signal Processing
+AST02.27 - Cross Layer Design for Wireless Networks
+AST02.28 - Data Communications
+AST02.29 - Digital Communications
+AST02.30 - Machine Learning for Wireless Communications
+AST02.31 - Network Quality of Service
+AST02.32 - Wireless Sensor Networks and IoT Communications
+AST02.33 - Deep Learning
+AST02.34 - Signals, Systems and Stochastic Processes
+AST02.35 - Stochastic Networks
+AST03.01 - Geographic Information Systems
+AST03.02 - Remote Sensing
+AST03.03 - Introduction to Python in Environmental Data Analysis
+AST03.04 - Digital Image Processing in Remote Sensing
+AST03.05 - Unmanned Aerial Vehicle Applications and Processing
+AST03.06 - Web GIS Technology
+AST03.07 - Positioning and Location-Based Services Technology
+AST03.08 - GIS for Health
+AST03.09 - Remote Sensing of Water
+AST03.10 - GeoAI for Earth Observation and Environmental Change
+AST03.11 - Advanced Spatial Analysis Methods
+AST03.12 - Satellite Microwave Remote Sensing
+AST03.13 - Principles and Application of InSAR
+AST03.14 - Land Use Dynamics and Geo-Predictive Modeling
+AST03.15 - Introduction to Global Navigation Satellite Systems
+AST03.16 - GIS Programming and Modeling
+AST03.17 - Free and Open Source Software for Geospatial Analysis
+AST03.18 - Geospatial Transformation and Digital Surveying Technologies
