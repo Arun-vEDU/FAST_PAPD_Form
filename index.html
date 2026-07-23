@@ -254,6 +254,64 @@
     margin-top:6px;
   }
 
+  .import-btn{
+    color:var(--gold);
+    border-color:var(--gold);
+    margin-left:8px;
+  }
+  .import-btn:hover{background:#F5EEDD;}
+
+  .import-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(30,42,58,0.55);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .import-overlay.show{display:flex;}
+  .import-modal{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    max-width:560px;
+    width:100%;
+    padding:26px 28px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+  }
+  .import-modal h3{margin:0 0 10px;font-size:17px;color:var(--ink);}
+  .import-hint{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin:0 0 14px;
+  }
+  .import-hint code{
+    background:var(--paper-dim);
+    padding:1px 5px;
+    border-radius:2px;
+    font-size:11.5px;
+  }
+  .import-modal input[type=file]{
+    width:100%;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-size:12.5px;
+    margin-bottom:12px;
+  }
+  .import-modal textarea{
+    font-family:'Courier New',monospace;
+    font-size:13px;
+  }
+  .import-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:16px;
+  }
+
   .sign-row{
     display:grid;
     grid-template-columns:2fr 1fr;
@@ -351,10 +409,12 @@
     .sheet::before{display:none;}
     .actions,.status{display:none !important;}
     .signin-reminder{display:none !important;}
+    .import-overlay{display:none !important;}
     .icon-btn,.add-course{display:none !important;}
     input,textarea{border:none;border-bottom:1px solid #999;border-radius:0;}
   }
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 
@@ -380,12 +440,18 @@
       list will be treated as consented.
     </div>
 
+    <!-- Populated from subjects.txt / instructors.txt at load; powers autocomplete -->
+    <datalist id="courseCodeList"></datalist>
+    <datalist id="courseTitleList"></datalist>
+    <datalist id="instructorNameList"></datalist>
+    <datalist id="instructorProgramList"></datalist>
+
     <!-- PERSONAL DETAILS -->
     <div class="section-label">Instructor Details</div>
     <div class="row2">
       <div class="field">
         <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" placeholder="e.g. Dr. Ayesha Khan" required>
+        <input type="text" id="fullName" list="instructorNameList" placeholder="e.g. Dr. Ayesha Khan" required>
       </div>
       <div class="field">
         <label for="facultyId">Faculty / Employee ID</label>
@@ -395,7 +461,7 @@
     <div class="row2">
       <div class="field">
         <label for="dept">Academic Program</label>
-        <input type="text" id="dept" placeholder="e.g. Information and Communication Technologies">
+        <input type="text" id="dept" list="instructorProgramList" placeholder="e.g. Information and Communication Technologies">
       </div>
       <div class="field">
         <label for="email">Email Address</label>
@@ -413,6 +479,7 @@
       </div>
       <div class="course-list"></div>
       <button type="button" class="add-course" onclick="addCourseRow('fall2026')">+ Add course</button>
+      <button type="button" class="add-course import-btn" onclick="openImportModal('fall2026')">📄 Import list</button>
     </div>
 
     <div class="semester-card" data-sem="spring2027">
@@ -422,15 +489,17 @@
       </div>
       <div class="course-list"></div>
       <button type="button" class="add-course" onclick="addCourseRow('spring2027')">+ Add course</button>
+      <button type="button" class="add-course import-btn" onclick="openImportModal('spring2027')">📄 Import list</button>
     </div>
 
     <div class="semester-card" data-sem="inter2027">
       <div class="semester-head">
-        <h3>Inter-semester</h3>
+        <h3>Intersession</h3>
         <span>Summer 2027</span>
       </div>
       <div class="course-list"></div>
       <button type="button" class="add-course" onclick="addCourseRow('inter2027')">+ Add course</button>
+      <button type="button" class="add-course import-btn" onclick="openImportModal('inter2027')">📄 Import list</button>
     </div>
 
     <!-- CONSENT -->
@@ -439,7 +508,7 @@
       <label class="consent-line">
         <input type="checkbox" id="consentAll">
         <span>I consent to my recorded lectures for the course(s) listed above, across the 2026–27
-        academic year (Fall 2026, Spring 2027, Inter-semester 2027), being uploaded to the <b>AIT
+        academic year (Fall 2026, Spring 2027, Intersession 2027), being uploaded to the <b>AIT
         Recordings</b> YouTube channel — except for any course(s) specifically listed below.</span>
       </label>
     </div>
@@ -450,6 +519,7 @@
       </div>
       <div class="course-list"></div>
       <button type="button" class="add-course" onclick="addCourseRow('exceptions')">+ Add course</button>
+      <button type="button" class="add-course import-btn" onclick="openImportModal('exceptions')">📄 Import list</button>
       <div class="exception-hint">Leave empty if you consent to recording for all courses listed above.</div>
     </div>
 
@@ -463,7 +533,7 @@
       <div class="field">
         <label for="signDate">Date</label>
         <input type="text" id="signDate" readonly>
-        <div class="exception-hint" style="margin-top:6px;"> Today's date.</div>
+        <div class="exception-hint" style="margin-top:6px;">Set automatically to today's date.</div>
       </div>
     </div>
 
@@ -472,6 +542,24 @@
     <form id="deliveryForm" method="POST" target="_blank" style="display:none;">
       <input type="hidden" name="payload" id="payloadField">
     </form>
+
+    <div class="import-overlay" id="importOverlay">
+      <div class="import-modal">
+        <h3>Import courses into <span id="importModalSemLabel"></span></h3>
+        <p class="import-hint">
+          Upload a text-based PDF of your course list, or just paste the list below. One course per
+          line works best — <code>CODE - Title</code>, <code>CODE, Title</code>, or code and title
+          separated by a tab all parse correctly. Review and fix the text before adding; scanned/image
+          PDFs can't be read automatically.
+        </p>
+        <input type="file" id="importFileInput" accept="application/pdf" onchange="handlePdfUpload(this)">
+        <textarea id="importText" rows="8" placeholder="CS101 - Introduction to Programming&#10;CS204, Data Structures&#10;IT301  Database Systems"></textarea>
+        <div class="import-actions">
+          <button type="button" class="secondary" onclick="closeImportModal()">Cancel</button>
+          <button type="button" class="primary" onclick="confirmImport()">Add to list</button>
+        </div>
+      </div>
+    </div>
 
     <div class="signin-reminder">
       <span>⚠ Before submitting, make sure this browser is signed in with your <b>AIT Google account</b> — otherwise submission will be blocked.</span>
@@ -487,8 +575,8 @@
 
     <div class="footer-note">
       Submitting opens a new tab to confirm with your AIT Google account, then logs your response to
-      Google Sheets, saves a PDF, and emails a copy to you and to the dean office at
-      <span id="officeEmailDisplay">iot@ait.ac.th</span>. If the new tab shows a Google Drive
+      Google Sheets, saves a PDF, and emails a copy to you and to the recordings office at
+      <span id="officeEmailDisplay">recordings@ait.ac.th</span>. If the new tab shows a Google Drive
       "file cannot be opened" error instead of a confirmation, you're signed into the wrong Google
       account in this browser — switch to your AIT account above and submit again.
     </div>
@@ -501,7 +589,7 @@
   const SCRIPT_URL = "https://script.google.com/a/macros/ait.asia/s/AKfycbx2D3z7WHC6sCAErJhSaBEDOvSq5heRSnNYhdTjK6NS0UZ-kzRL-zJTtUmIwF2ijhhw/exec";
 
   // Cosmetic only — shown in the footer note. Keep this in sync with OFFICE_EMAIL in the Apps Script.
-  const OFFICE_EMAIL_DISPLAY = "iot@ait.ac.th";
+  const OFFICE_EMAIL_DISPLAY = "recordings@ait.ac.th";
   document.getElementById('officeEmailDisplay').textContent = OFFICE_EMAIL_DISPLAY;
 
   const semesterLabels = {
@@ -515,8 +603,8 @@
     const row = document.createElement('div');
     row.className = 'course-row';
     row.innerHTML = `
-      <input type="text" class="code" placeholder="Code (e.g. CS101)" value="${code||''}">
-      <input type="text" class="title" placeholder="Course title (e.g. Intro to Programming)" value="${title||''}">
+      <input type="text" class="code" list="courseCodeList" placeholder="Code (e.g. CS101)" value="${code||''}">
+      <input type="text" class="title" list="courseTitleList" placeholder="Course title (e.g. Intro to Programming)" value="${title||''}">
       <button type="button" class="icon-btn" onclick="this.parentElement.remove()" title="Remove">×</button>
     `;
     list.appendChild(row);
@@ -533,6 +621,220 @@
     document.getElementById('signDate').value = `${dd}-${mm}-${yyyy}`;
   }
   setTodayAsSignDate();
+
+  // ---------- Import courses (PDF / pasted text) ----------
+  if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  let importTargetSem = null;
+  const importSemLabels = Object.assign({}, semesterLabels, { exceptions: 'Exceptions' });
+
+  function openImportModal(sem){
+    importTargetSem = sem;
+    document.getElementById('importModalSemLabel').textContent = importSemLabels[sem] || sem;
+    document.getElementById('importText').value = '';
+    document.getElementById('importFileInput').value = '';
+    document.getElementById('importOverlay').classList.add('show');
+  }
+
+  function closeImportModal(){
+    document.getElementById('importOverlay').classList.remove('show');
+  }
+
+  async function handlePdfUpload(input){
+    const file = input.files[0];
+    if(!file) return;
+    const box = document.getElementById('importText');
+    box.value = 'Extracting text from PDF…';
+    try{
+      const text = await extractPdfText(file);
+      box.value = text || '(No selectable text found — this may be a scanned/image PDF. Try pasting the list instead.)';
+    } catch(err){
+      box.value = '';
+      alert('Could not read that PDF. It may be a scanned/image PDF rather than text-based — try pasting the course list as text instead.');
+    }
+  }
+
+  async function extractPdfText(file){
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const lines = [];
+    for(let p = 1; p <= pdf.numPages; p++){
+      const page = await pdf.getPage(p);
+      const content = await page.getTextContent();
+      let lastY = null, current = [];
+      content.items.forEach(item => {
+        const y = item.transform[5];
+        if(lastY !== null && Math.abs(y - lastY) > 2){
+          lines.push(current.join(' ').trim());
+          current = [];
+        }
+        current.push(item.str);
+        lastY = y;
+      });
+      if(current.length) lines.push(current.join(' ').trim());
+    }
+    return lines.filter(l => l).join('\n');
+  }
+
+  function parseCourseLine(line){
+    line = line.trim();
+    if(!line) return null;
+    let code = '', title = '';
+    if(line.includes('\t')){
+      const parts = line.split('\t');
+      code = (parts[0] || '').trim();
+      title = parts.slice(1).join(' ').trim();
+    } else if(/\s[-–—]\s/.test(line)){
+      const parts = line.split(/\s[-–—]\s/);
+      code = parts[0].trim();
+      title = parts.slice(1).join(' - ').trim();
+    } else if(line.includes(',')){
+      const parts = line.split(',');
+      code = parts[0].trim();
+      title = parts.slice(1).join(',').trim();
+    } else {
+      const m = line.match(/^([A-Za-z]{2,6}[\s-]?\d{2,4}[A-Za-z]?)\b\s*(.*)$/);
+      if(m && m[2]){
+        code = m[1].trim();
+        title = m[2].trim();
+      }
+    }
+    if(!title){ title = code; code = ''; }
+    return { code, title };
+  }
+
+  // ---------- Master course catalog (subjects.txt) — powers autocomplete ----------
+  // Place a subjects.txt file next to this HTML file in your repo, one course per
+  // line, e.g.:  CS101 - Introduction to Programming
+  let courseCatalog = [];
+
+  function escAttr(s){
+    return (s || '').toString()
+      .replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  async function loadCourseCatalog(){
+    try{
+      const res = await fetch('subjects.txt');
+      if(!res.ok) throw new Error('subjects.txt not found');
+      const text = await res.text();
+      courseCatalog = text.split('\n')
+        .map(l => l.trim())
+        .filter(Boolean)
+        .map(parseCourseLine)
+        .filter(c => c && c.code && c.title);
+      populateCatalogDatalists();
+    } catch(err){
+      console.warn('subjects.txt not found or unreadable — autocomplete will be unavailable until it is added.', err);
+    }
+  }
+
+  function populateCatalogDatalists(){
+    document.getElementById('courseCodeList').innerHTML =
+      courseCatalog.map(c => `<option value="${escAttr(c.code)}" label="${escAttr(c.title)}">`).join('');
+    document.getElementById('courseTitleList').innerHTML =
+      courseCatalog.map(c => `<option value="${escAttr(c.title)}" label="${escAttr(c.code)}">`).join('');
+  }
+
+  // Auto-fill the paired field once the typed value exactly matches a catalog entry.
+  // Delegated on document so it works for rows added later (imported or manually added).
+  document.addEventListener('input', function(e){
+    if(e.target.classList && e.target.classList.contains('code')){
+      const match = courseCatalog.find(c => c.code.toLowerCase() === e.target.value.trim().toLowerCase());
+      if(match){
+        const titleInput = e.target.closest('.course-row').querySelector('.title');
+        if(titleInput && !titleInput.value) titleInput.value = match.title;
+      }
+    } else if(e.target.classList && e.target.classList.contains('title')){
+      const match = courseCatalog.find(c => c.title.toLowerCase() === e.target.value.trim().toLowerCase());
+      if(match){
+        const codeInput = e.target.closest('.course-row').querySelector('.code');
+        if(codeInput && !codeInput.value) codeInput.value = match.code;
+      }
+    }
+  });
+
+  loadCourseCatalog();
+  // ---------------------------------------------------------------------------------
+
+  // ---------- Master instructor list (instructors.txt) — powers autocomplete ----------
+  // Place an instructors.txt file next to this HTML file in your repo, one instructor
+  // per line, e.g.:  Dr. Ayesha Khan - Computer Science
+  let instructorCatalog = [];
+
+  function parseInstructorLine(line){
+    line = line.trim();
+    if(!line) return null;
+    let name = '', program = '';
+    if(line.includes('\t')){
+      const parts = line.split('\t');
+      name = (parts[0] || '').trim();
+      program = parts.slice(1).join(' ').trim();
+    } else if(/\s[-–—]\s/.test(line)){
+      const parts = line.split(/\s[-–—]\s/);
+      name = parts[0].trim();
+      program = parts.slice(1).join(' - ').trim();
+    } else if(line.includes(',')){
+      const parts = line.split(',');
+      name = parts[0].trim();
+      program = parts.slice(1).join(',').trim();
+    } else {
+      name = line; // no separator found — treat whole line as name only
+    }
+    return { name, program };
+  }
+
+  async function loadInstructorCatalog(){
+    try{
+      const res = await fetch('instructors.txt');
+      if(!res.ok) throw new Error('instructors.txt not found');
+      const text = await res.text();
+      instructorCatalog = text.split('\n')
+        .map(l => l.trim())
+        .filter(Boolean)
+        .map(parseInstructorLine)
+        .filter(i => i && i.name);
+      populateInstructorDatalists();
+    } catch(err){
+      console.warn('instructors.txt not found or unreadable — instructor autocomplete will be unavailable until it is added.', err);
+    }
+  }
+
+  function populateInstructorDatalists(){
+    document.getElementById('instructorNameList').innerHTML =
+      instructorCatalog.map(i => `<option value="${escAttr(i.name)}" label="${escAttr(i.program)}">`).join('');
+    const uniquePrograms = [...new Set(instructorCatalog.map(i => i.program).filter(Boolean))];
+    document.getElementById('instructorProgramList').innerHTML =
+      uniquePrograms.map(p => `<option value="${escAttr(p)}">`).join('');
+  }
+
+  // Selecting/typing an exact instructor name auto-fills their program, if empty.
+  document.addEventListener('input', function(e){
+    if(e.target.id === 'fullName'){
+      const match = instructorCatalog.find(i => i.name.toLowerCase() === e.target.value.trim().toLowerCase());
+      if(match && match.program){
+        const deptInput = document.getElementById('dept');
+        if(deptInput && !deptInput.value) deptInput.value = match.program;
+      }
+    }
+  });
+
+  loadInstructorCatalog();
+  // --------------------------------------------------------------------------------------
+
+
+  function confirmImport(){
+    const text = document.getElementById('importText').value;
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    lines.forEach(line => {
+      const c = parseCourseLine(line);
+      if(c && c.title) addCourseRow(importTargetSem, c.code, c.title);
+    });
+    closeImportModal();
+  }
+  // ----------------------------------------------------------
 
   function collectData(){
     const semesters = {};
